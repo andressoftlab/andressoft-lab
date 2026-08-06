@@ -1,0 +1,879 @@
+<!-- AndresSoft Lab — sitio corporativo. Broadsheet design system (newsprint):
+     serif, tinta sobre papel, jerarquía por escala y espacio en blanco.
+     Estructura heredada del template Landing; contenido = catálogo AndresSoft. -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>AndresSoft Lab — Datos · IA · Automatización · Software</title>
+<style>
+:root {
+  --leading: 28px;
+  --half: 14px;
+  --edge: clamp(20px, 5vw, 72px);
+  --measure: 58ch;
+  --color-bg:#0a0e1a; --color-surface:#111a2e; --color-text:#eaf2ff;
+  --color-accent:#25c6ff; --color-accent-2:#9a5cff;
+  --color-divider:rgba(234,242,255,.15); --color-accent-700:#7fe0ff;
+  --font-heading:Inter,ui-sans-serif,system-ui,sans-serif; --font-heading-weight:750;
+  --space-2:8px; --space-3:12px; --space-4:20px;
+  --shadow-md:0 18px 42px rgba(0,0,0,.34); --shadow-lg:0 28px 70px rgba(0,0,0,.5);
+}
+html { scroll-behavior: smooth; background: var(--color-bg); max-width:100%; overflow-x:hidden; overscroll-behavior-x:none; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+*{box-sizing:border-box}
+body { width:100%; max-width:100%; margin: 0; text-wrap: pretty; background: transparent;color:var(--color-text);font:400 16px/1.6 Inter,ui-sans-serif,system-ui,sans-serif;overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y;user-select:none;-webkit-user-select:none; }
+img{user-select:none;-webkit-user-select:none;-webkit-user-drag:none}a,button{touch-action:manipulation}
+a{color:inherit}.nav{display:flex;align-items:center;gap:clamp(12px,2vw,28px);min-height:72px;padding-block:12px;position:sticky!important;top:0;background:rgba(10,14,26,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--color-divider);z-index:40!important}
+.nav-brand{margin-right:auto;font-weight:800;letter-spacing:-.02em}.btn{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--color-divider);border-radius:999px;padding:11px 18px;text-decoration:none;font-weight:700;overflow:hidden;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}.btn-primary{color:#06101d;background:linear-gradient(135deg,#25c6ff,#9a5cff);border:0;box-shadow:0 10px 28px rgba(37,198,255,.25)}.btn-secondary,.btn-ghost{background:rgba(17,26,46,.7)}.btn:hover{transform:translateY(-3px);box-shadow:0 14px 38px rgba(37,198,255,.25);border-color:#25c6ff}.btn-block{width:100%}.card{display:flex;flex-direction:column;border:1px solid var(--color-divider);border-radius:16px;background:rgba(17,26,46,.76);backdrop-filter:blur(10px)}.card-kicker,.tag{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-accent-700)}
+.brand-orbit{width:34px;height:34px;border:2px solid #25c6ff;border-radius:50%;position:relative;box-shadow:0 0 18px rgba(37,198,255,.55)}.brand-orbit::before{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:#9a5cff;top:-5px;left:10px;box-shadow:0 0 14px #9a5cff}.brand-orbit::after{content:"A";position:absolute;inset:0;display:grid;place-items:center;font-weight:900;font-size:15px}
+.scroll-progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#25c6ff,#9a5cff,#00e0c2);box-shadow:0 0 15px #25c6ff;z-index:100;pointer-events:none}
+.cursor-glow{position:fixed;width:320px;height:320px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(37,198,255,.11),transparent 68%);transform:translate(-50%,-50%);will-change:left,top}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.48);transform:scale(0);animation:ripple .65s ease-out;pointer-events:none;z-index:-1}@keyframes ripple{to{transform:scale(4);opacity:0}}
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 var(--edge); position: relative; z-index: 1; }
+.nav { position: relative; z-index: 1; }
+
+/* — dynamic background: process halftone screens drifting on scroll (the
+     deck's proof-margin furniture, faint enough to keep paper as paper) — */
+#bg-field { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.bg-dots { position: absolute; inset: -30% -30%;
+  background-repeat: repeat; mix-blend-mode: multiply; will-change: transform; }
+.bg-c { background-image: radial-gradient(circle, var(--color-accent) 30%, transparent 33%);
+  background-size: 15px 15px; opacity: 0.06; }
+.bg-m { background-image: radial-gradient(circle, var(--color-accent-2) 30%, transparent 33%);
+  background-size: 22px 22px; opacity: 0.045; }
+@media (prefers-reduced-motion: reduce) { .bg-dots { transform: none !important; } }
+.nav { padding-inline: max(var(--edge), calc((100% - 1200px) / 2 + var(--edge))); }
+.nav a { white-space: nowrap; }
+.nav a[aria-current='location'] { color: var(--color-accent-700); }
+@media (max-width: 560px) { .nav a { display: none; } }
+
+/* — kicker (section slug in ink; wayfinding furniture) — */
+.kicker {
+  display: block; font-size: 13px; line-height: var(--half);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  font-feature-settings: "tnum" 1;
+  margin: 0 0 calc(var(--leading) - var(--half));
+}
+
+/* — hero — */
+.hero { padding: calc(4 * var(--leading)) 0 calc(3 * var(--leading)); }
+.display {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(42px, 6vw, 80px);
+  line-height: clamp(45.5px, 6.5vw, 86.5px);
+  letter-spacing: -0.02em; margin: 0;
+  margin-left: -0.035em;
+}
+.display .line { display: block; padding-bottom: 0.08em; }
+.hero .sub { font-size: 18px; line-height: var(--leading); max-width: var(--measure);
+  margin: calc(1.5 * var(--leading) - 1cap) 0 0;
+  text-box: trim-both cap alphabetic; }
+.hero .row { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--leading); }
+
+/* — promo pricing (fixed-price starter plans, high-impact) — */
+.promo { padding: calc(2 * var(--leading)) 0 calc(3 * var(--leading)); }
+.promo-grid { display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2vw, 26px); margin-top: calc(2 * var(--leading)); align-items: stretch; }
+.promo-card { position: relative; display: flex; flex-direction: column;
+  padding: calc(1.4 * var(--leading)) calc(1.25 * var(--leading)) calc(1.25 * var(--leading));
+  border-radius: 16px; border: 1px solid var(--color-divider);
+  background: color-mix(in srgb, #111a2e 78%, transparent); backdrop-filter: blur(10px);
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease; }
+.promo-card:hover { transform: translateY(-8px);
+  border-color: color-mix(in srgb, #25c6ff 45%, transparent);
+  box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 34px color-mix(in srgb, #25c6ff 22%, transparent); }
+.promo-featured { border-color: color-mix(in srgb, #9a5cff 55%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, #1a1240 60%, transparent), color-mix(in srgb, #111a2e 82%, transparent));
+  box-shadow: 0 20px 60px rgba(0,0,0,.55), 0 0 44px color-mix(in srgb, #9a5cff 26%, transparent); }
+.promo-featured:hover { border-color: color-mix(in srgb, #9a5cff 75%, transparent);
+  box-shadow: 0 28px 70px rgba(0,0,0,.6), 0 0 56px color-mix(in srgb, #9a5cff 38%, transparent); }
+.promo-ribbon { position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  white-space: nowrap; font-size: 12px; letter-spacing: 0.05em; font-weight: 600;
+  color: #0a0e1a; background: linear-gradient(135deg, #25c6ff, #9a5cff);
+  padding: 6px 16px; border-radius: 999px;
+  box-shadow: 0 0 24px color-mix(in srgb, #9a5cff 55%, transparent); }
+.promo-tag { align-self: flex-start; font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--color-accent-700); border: 1px solid color-mix(in srgb, #25c6ff 40%, transparent);
+  padding: 4px 10px; border-radius: 999px; }
+.promo-name { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 24px; line-height: 1.15; letter-spacing: -0.015em; margin: var(--space-3) 0 0; }
+.promo-desc { font-size: 14px; line-height: 21px; margin: var(--space-2) 0 0;
+  color: color-mix(in srgb, var(--color-text) 80%, transparent); }
+.promo-from { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 58%, transparent); margin: var(--leading) 0 0; }
+.promo-price { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 44px; line-height: 1; letter-spacing: -0.02em; margin: 2px 0 0;
+  background: linear-gradient(135deg, #7fe0ff, #b98cff); -webkit-background-clip: text;
+  background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 22px color-mix(in srgb, #25c6ff 35%, transparent)); }
+.promo-mo { font-size: 12.5px; color: color-mix(in srgb, var(--color-text) 62%, transparent); margin: 6px 0 0; }
+.promo-list { list-style: none; padding: 0; margin: var(--space-4) 0 var(--space-4);
+  display: flex; flex-direction: column; gap: 8px; }
+.promo-list li { font-size: 13.5px; line-height: 20px; padding-left: 1.5em; position: relative;
+  color: color-mix(in srgb, var(--color-text) 85%, transparent); }
+.promo-list li::before { content: "✓"; position: absolute; left: 0; top: 0;
+  color: #25c6ff; font-weight: 700; text-shadow: 0 0 10px color-mix(in srgb, #25c6ff 60%, transparent); }
+.promo-card .btn { margin-top: auto; }
+@media (max-width: 860px) { .promo-grid { grid-template-columns: 1fr; }
+  .promo-card { max-width: 480px; } }
+
+/* — front-page head furniture: dateline rail between newspaper rules,
+     claims set as an INDEX with dot leaders — */
+.frontpage { padding: calc(2 * var(--leading)) 0 calc(2.5 * var(--leading)); }
+.rule-head { height: 5px; border: 0; margin: 0;
+  border-top: 2px solid var(--color-text);
+  border-bottom: 1px solid var(--color-text); }
+.rule-cut { height: 0; border: 0; border-top: 1px solid var(--color-text); margin: 0; }
+.dateline { display: flex; justify-content: space-between; flex-wrap: wrap;
+  gap: var(--half) var(--leading); margin: 0; padding: var(--half) 0;
+  font-size: 13px; line-height: var(--half); letter-spacing: 0.08em; text-transform: uppercase;
+  font-feature-settings: "pnum" 1;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent); }
+.index { display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--half) calc(2.5 * var(--leading));
+  padding: calc(var(--leading) - var(--half)) 0 var(--leading); }
+.ix { display: flex; align-items: baseline; gap: 8px; margin: 0;
+  font-size: 15.5px; line-height: var(--leading); }
+.ix-leader { flex: 1; min-width: 28px; align-self: flex-end; margin-bottom: 0.34em;
+  border-bottom: 1px dotted color-mix(in srgb, var(--color-text) 45%, transparent); }
+.ix-num { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 17px; font-feature-settings: "pnum" 1; white-space: nowrap; }
+.ix-num.spot { color: var(--color-accent-700); }
+
+/* — section title (serif, flush-left, on paper) — */
+.sec-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(28px, 3.4vw, 40px); line-height: 1.1; letter-spacing: -0.02em;
+  margin: 0; max-width: 22ch; text-box: trim-both cap alphabetic; }
+.sec-lead { font-size: 17px; line-height: var(--leading); max-width: var(--measure);
+  margin: calc(var(--leading) - 1cap) 0 0;
+  color: color-mix(in srgb, var(--color-text) 82%, transparent);
+  text-box: trim-both cap alphabetic; }
+
+/* — feature columns (justified serif, whitespace between — no rules) — */
+.features { padding: calc(3 * var(--leading)) 0 calc(2.5 * var(--leading)); }
+.cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(1.5 * var(--leading)) clamp(28px, 4vw, 64px);
+  margin-top: calc(var(--leading) - var(--half)); }
+.col h3 { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 24px; line-height: var(--leading); letter-spacing: -0.01em;
+  margin: 0; text-box: trim-both cap alphabetic; }
+.col p { font-size: 15.5px; line-height: var(--leading); margin: calc(var(--leading) - 1cap) 0 0;
+  color: color-mix(in srgb, var(--color-text) 78%, transparent);
+  text-align: justify; hyphens: auto; hyphenate-limit-chars: 6 3 3;
+  text-box: trim-both cap alphabetic; }
+
+/* — servicios (two service blocks; column grammar, no boxes) — */
+.services { padding: calc(2.5 * var(--leading)) 0 calc(1.5 * var(--leading)); }
+.service { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: var(--leading) clamp(24px, 5vw, 80px); align-items: start;
+  padding: calc(1.75 * var(--leading)) 0; }
+.service .svc-head .kicker { color: var(--color-accent-700); }
+.svc-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(24px, 2.6vw, 32px); line-height: calc(1.4 * var(--leading)); letter-spacing: -0.015em;
+  margin: 0; text-box: trim-both cap alphabetic; }
+.svc-lead { font-size: 16px; line-height: var(--leading); margin: calc(var(--leading) - 1cap) 0 0;
+  color: color-mix(in srgb, var(--color-text) 82%, transparent); max-width: 40ch;
+  text-box: trim-both cap alphabetic; }
+.svc-list { list-style: none; padding: 0; margin: 0;
+  columns: 2; column-gap: calc(2 * var(--leading)); }
+.svc-list li { font-size: 15.5px; line-height: var(--leading); break-inside: avoid;
+  padding-left: 1.1em; text-indent: -1.1em; margin-bottom: var(--half);
+  color: color-mix(in srgb, var(--color-text) 84%, transparent); }
+.svc-list li::before { content: "—"; color: var(--color-accent-700); margin-right: 0.5em; }
+
+/* — showcase figure: the photograph as its four process plates — */
+.split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--leading) clamp(24px, 5vw, 96px); align-items: center;
+  padding: calc(2 * var(--leading)) 0 calc(3 * var(--leading)); }
+.split-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 32px; line-height: calc(1.5 * var(--leading)); letter-spacing: -0.015em;
+  margin: 0; text-box: trim-both cap alphabetic; }
+.split-copy .note { font-size: 15.5px; line-height: var(--leading);
+  color: color-mix(in srgb, var(--color-text) 78%, transparent);
+  margin: calc(var(--leading) - 1cap) 0 0; max-width: 48ch;
+  text-align: justify; hyphens: auto; hyphenate-limit-chars: 6 3 3;
+  text-box: trim-both cap alphabetic; }
+.split-figure { margin: 0; }
+.split-figure.cmyk { overflow: visible; }
+.split-figure .print { aspect-ratio: 986 / 660; }
+
+/* — planes (discrete listings — the one boxed component is allowed here) — */
+.plans { padding: calc(2 * var(--leading)) 0 calc(2.5 * var(--leading)); }
+.plans-grid { display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.2vw, 30px); margin-top: calc(2 * var(--leading)); align-items: stretch; }
+.plan { gap: 0; padding: calc(1.25 * var(--leading)) calc(1.1 * var(--leading)); }
+.plan .card-kicker { font-size: 11px; }
+.plan-desde { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent); margin: var(--space-3) 0 0; }
+.plan-price { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 38px; line-height: 1.02; letter-spacing: -0.02em; margin: 2px 0 0; }
+.plan-mo { font-size: 13px; color: color-mix(in srgb, var(--color-text) 62%, transparent); margin: 4px 0 0; }
+.plan-model { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 26px; line-height: 1.1; letter-spacing: -0.015em; margin: var(--space-3) 0 0; }
+.plan-pay { font-size: 13px; letter-spacing: 0.04em; margin: 6px 0 0;
+  color: var(--color-accent-700); }
+.medida-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 980px) { .medida-grid { grid-template-columns: repeat(2, 1fr); } }
+.plan-for { font-size: 14px; line-height: 22px; margin: var(--space-3) 0 0;
+  color: color-mix(in srgb, var(--color-text) 80%, transparent); }
+.plan-list { list-style: none; padding: 0; margin: var(--space-4) 0 var(--space-4);
+  display: flex; flex-direction: column; gap: 7px; }
+.plan-list li { font-size: 13.5px; line-height: 20px; padding-left: 1.2em; text-indent: -1.2em;
+  color: color-mix(in srgb, var(--color-text) 84%, transparent); }
+.plan-list li::before { content: "›"; color: var(--color-accent-700); margin-right: 0.55em; font-weight: 600; }
+.plan .btn { margin-top: auto; }
+.plan.star { box-shadow: var(--shadow-lg); }
+.plan-badge { align-self: flex-start; margin-bottom: var(--space-2); }
+
+/* — la cuenta (savings): the plate numeral, on paper — */
+.savings { padding: calc(2.5 * var(--leading)) 0 calc(2.5 * var(--leading)); }
+.savings-fig { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(52px, 10vw, 124px); letter-spacing: -0.02em;
+  margin: calc(1.5 * var(--leading)) 0 0; }
+.savings-cap { font-size: 16px; line-height: var(--leading);
+  color: color-mix(in srgb, var(--color-text) 80%, transparent);
+  max-width: 48ch; margin: var(--leading) 0 0; }
+.savings-table { margin-top: calc(2 * var(--leading)); max-width: 620px; }
+.savings-table td:not(:first-child), .savings-table th:not(:first-child) { text-align: right; font-feature-settings: "tnum" 1; }
+.savings-note { font-size: 12px; line-height: var(--leading);
+  color: color-mix(in srgb, var(--color-text) 60%, transparent); margin: var(--leading) 0 0; max-width: 60ch; }
+
+/* — pull quote (the serif's TRUE ITALIC) — */
+.quote { padding: calc(2.5 * var(--leading)) 0 calc(3 * var(--leading)); }
+.quote blockquote {
+  font-family: var(--font-heading); font-style: italic; font-weight: 400;
+  font-size: clamp(24px, 2.6vw, 34px); line-height: calc(1.5 * var(--leading));
+  letter-spacing: -0.01em; max-width: 30ch; margin: 0;
+  text-indent: -0.475em;
+  text-box: trim-both cap alphabetic;
+}
+.quote figcaption { font-size: 15.5px; line-height: var(--leading);
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  margin: calc(2 * var(--leading) - 1cap) 0 0;
+  text-indent: -1.045em;
+  text-box: trim-both cap alphabetic; }
+@media (max-width: 720px) {
+  .quote blockquote, .quote figcaption { text-indent: 0; }
+}
+
+/* — contacto / cierre — */
+.contact { padding: calc(2.5 * var(--leading)) 0 calc(2 * var(--leading)); }
+.contact .sec-lead { max-width: 40ch; }
+.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: var(--leading); margin: calc(1.75 * var(--leading)) 0 0; max-width: 780px; }
+.contact-item .kicker { color: var(--color-accent-700); margin-bottom: 6px; }
+.contact-val { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 20px; line-height: 1.25; }
+.contact-val a { text-decoration: none; }
+.contact-val a:hover { text-decoration: underline; }
+.contact-sub { font-size: 13px; margin: 4px 0 0;
+  color: color-mix(in srgb, var(--color-text) 62%, transparent); }
+.contact-cta { margin-top: calc(1.75 * var(--leading)); }
+.btn-lg { font-size: 16px; padding: var(--space-3) calc(var(--space-4) * 1.1); }
+
+footer { padding: calc(2 * var(--leading)) 0; margin-top: var(--leading);
+  border-top: 1px solid var(--color-divider);
+  font-size: 13px; line-height: var(--leading);
+  color: color-mix(in srgb, var(--color-text) 70%, transparent); }
+.foot-logo { height: 72px; width: auto; margin: 0 0 var(--half); }
+.foot-slogan { font-style: italic; }
+
+/* — brand mark + motion — */
+.nav-brand { display: flex; align-items: center; gap: 10px; text-decoration:none; }
+.brand-icon{position:relative;width:46px;height:46px;overflow:hidden;border-radius:12px;background:#061025;box-shadow:0 0 22px rgba(37,198,255,.22);flex:none}
+.brand-icon img{position:absolute;width:116px;max-width:none;left:-35px;top:-8px}
+.brand-copy{display:grid;line-height:1}.brand-name{font-size:20px;font-weight:800;letter-spacing:-.04em;color:#fff}.brand-name b{color:#159cff}.brand-lab{display:flex;align-items:center;gap:7px;margin-top:5px;color:#8f72ff;font-size:9px;font-weight:800;letter-spacing:.52em}.brand-lab::before,.brand-lab::after{content:"";height:1px;width:16px;background:linear-gradient(90deg,#159cff,#8a2be2)}
+.foot-brand{display:flex;align-items:center;gap:18px;margin-bottom:var(--half)}.foot-brand .brand-icon{width:72px;height:72px;border-radius:16px}.foot-brand .brand-icon img{width:182px;left:-55px;top:-13px}.foot-brand .brand-name{font-size:30px}.foot-brand .brand-lab{font-size:11px}
+@media (prefers-reduced-motion: no-preference) {
+  .nav-logo { animation: markin .8s cubic-bezier(.2,.6,.2,1) both; }
+  @keyframes markin { from { opacity: 0; transform: scale(.8) rotate(-8deg); } to { opacity: 1; transform: none; } }
+  .plan { transition: transform .35s ease, box-shadow .35s ease; }
+  .plan:hover { transform: translateY(-6px); }
+  .plan.elev-sm:hover { box-shadow: var(--shadow-md); }
+  .plan.elev-lg:hover { box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--color-accent-2) 30%, transparent); }
+  /* scroll reveal — high-tech assemble */
+  .hero .display, .hero .sub, .hero .row,
+  .promo .sec-title, .promo .sec-lead, .promo-grid .promo-card,
+  .services .svc-head, .services .mm-root, .services .mm-node,
+  .plans .sec-title, .plans .sec-lead, .plans-grid .plan,
+  .contact .sec-title, .contact .sec-lead,
+  .contact-grid .contact-item, .contact-cta {
+    opacity: 0; transform: translateY(38px) scale(.955);
+    filter: blur(12px); clip-path: inset(0 0 12% -8%);
+    transition: opacity .85s cubic-bezier(.16,1,.3,1),
+                transform .95s cubic-bezier(.16,1,.3,1),
+                filter .8s cubic-bezier(.16,1,.3,1),
+                clip-path .95s cubic-bezier(.16,1,.3,1);
+  }
+  .is-in { opacity: 1 !important; transform: none !important; filter: none !important; clip-path: inset(0 0 -12% -8%) !important; }
+  /* neon flash as pieces snap into place */
+  .mm-root.is-in, .mm-node.is-in, .contact-grid .contact-item.is-in { animation: techIn .9s cubic-bezier(.16,1,.3,1); }
+  @keyframes techIn {
+    0% { box-shadow: 0 0 0 1px color-mix(in srgb,#25c6ff 0%,transparent); }
+    45% { box-shadow: 0 0 30px color-mix(in srgb,#25c6ff 55%,transparent); }
+    100% { box-shadow: 0 0 0 1px transparent; }
+  }
+  /* headings sweep open from the left like a scan */
+  .hero .display.is-in, .sec-title.is-in, .svc-title.is-in { animation: scanIn .9s cubic-bezier(.16,1,.3,1); }
+  .promo { padding-top: calc(2.5 * var(--leading)); }
+  .promo-grid { margin-top: calc(2.4 * var(--leading)); overflow: visible; }
+  /* the ribbon sits above the card edge — never let the reveal clip it */
+  .promo-grid .promo-card, .promo-grid .promo-card.is-in { clip-path: none !important; }
+}
+
+/* — responsive collapse — */
+@media (max-width: 1080px) {
+  .cols { grid-template-columns: repeat(2, 1fr); }
+  .col:last-child { grid-column: 1 / -1; }
+  .col:last-child p { max-width: var(--measure); }
+}
+@media (max-width: 860px) {
+  .plans-grid { grid-template-columns: 1fr; }
+  .plan { max-width: 520px; }
+  .svc-list { columns: 1; }
+}
+@media (max-width: 720px) {
+  .hero { padding-top: calc(2.5 * var(--leading)); }
+  .index { grid-template-columns: 1fr; }
+  .cols { grid-template-columns: 1fr; }
+  .service { grid-template-columns: 1fr; }
+  .split { grid-template-columns: 1fr; }
+  .split-figure { order: -1; }
+  .contact-grid { grid-template-columns: 1fr; max-width: 420px; }
+}
+</style>
+<style id="dark-neon">
+:root{
+  --color-bg:#0a0e1a !important; --color-surface:#111a2e !important;
+  --color-text:#eaf2ff !important;
+  --color-accent:#25c6ff !important; --color-accent-2:#9a5cff !important;
+  --color-divider:color-mix(in srgb,#eaf2ff 15%,transparent) !important;
+  --color-accent-600:#4fd4ff !important; --color-accent-700:#7fe0ff !important;
+  --color-accent-100:#0f2740 !important; --color-accent-800:#bfeeff !important;
+  --color-accent-2-100:#221338 !important; --color-accent-2-800:#e6d4ff !important;
+  --color-neutral-700:#9fb0cc !important;
+  --shadow-sm:0 2px 14px rgba(0,0,0,.5) !important;
+  --shadow-md:0 8px 30px rgba(0,0,0,.55) !important;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.6) !important;
+}
+html,body{background:#0a0e1a;color:var(--color-text);}
+.display{text-shadow:0 0 48px color-mix(in srgb,#25c6ff 30%,transparent);}
+.sec-title,.svc-title{color:#f4f8ff;}
+.btn-primary{color:#04121f !important;box-shadow:0 0 26px color-mix(in srgb,#25c6ff 50%,transparent);}
+.btn-primary:hover{box-shadow:0 0 34px color-mix(in srgb,#25c6ff 70%,transparent);}
+.rule-head{border-top-color:#25c6ff;border-bottom-color:color-mix(in srgb,#9a5cff 70%,transparent);}
+.rule-cut{border-top-color:var(--color-divider);}
+.ix-num.spot{color:#25c6ff;text-shadow:0 0 18px color-mix(in srgb,#25c6ff 55%,transparent);}
+.card.plan{background:color-mix(in srgb,#111a2e 82%,transparent);backdrop-filter:blur(8px);border:1px solid var(--color-divider);}
+.plan.star{border-color:color-mix(in srgb,#9a5cff 55%,transparent);box-shadow:var(--shadow-lg),0 0 40px color-mix(in srgb,#9a5cff 30%,transparent);}
+.tag-accent-2{background:#2a1547;color:#e6d4ff;box-shadow:0 0 20px color-mix(in srgb,#9a5cff 45%,transparent);}
+.contact-val a{color:#25c6ff;}
+/* aurora field */
+#bg-field{background:radial-gradient(130% 90% at 50% -20%,#12213f 0%,#0a0e1a 62%);}
+.aurora{position:absolute;border-radius:50%;filter:blur(90px);mix-blend-mode:screen;will-change:transform;}
+.a1{width:65vw;height:65vw;left:-12vw;top:-18vw;background:radial-gradient(circle,#12b6ff,transparent 66%);opacity:.5;}
+.a2{width:58vw;height:58vw;right:-16vw;top:8vh;background:radial-gradient(circle,#7c3cff,transparent 66%);opacity:.45;}
+.a3{width:52vw;height:52vw;left:18vw;top:52vh;background:radial-gradient(circle,#00e0c2,transparent 68%);opacity:.35;}
+#net{position:absolute;inset:0;display:block;width:100%;height:100%;}
+.game-hud{position:fixed;right:18px;bottom:18px;z-index:20;pointer-events:none;font:600 10px/1.35 ui-monospace,monospace;letter-spacing:.1em;color:rgba(127,224,255,.8);padding:9px 12px;border:1px solid rgba(37,198,255,.24);border-radius:9px;background:rgba(10,14,26,.55);backdrop-filter:blur(8px)}
+.game-hud b{color:#fff}.nav a.active:not(.btn){color:#7fe0ff;text-shadow:0 0 12px rgba(37,198,255,.7)}
+.game-toggle{display:none;position:fixed;right:14px;bottom:14px;z-index:60;min-width:92px;border:1px solid rgba(127,224,255,.45);border-radius:999px;padding:11px 16px;color:#06101d;background:linear-gradient(135deg,#25c6ff,#9a5cff);box-shadow:0 8px 28px rgba(37,198,255,.35);font:800 13px/1 Inter,system-ui,sans-serif}
+.game-toggle[aria-pressed="true"]{color:#eaf2ff;background:rgba(10,14,26,.9);border-color:#9a5cff}
+.game-flash{position:fixed;inset:0;z-index:19;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.58),rgba(154,92,255,.18) 22%,transparent 55%);opacity:0;transition:opacity .22s ease}.game-flash.on{opacity:1}
+/* synoptic mind-map (replaces bullet lists) */
+.mindmap{display:flex;align-items:stretch;gap:30px;}
+.mm-root{align-self:center;position:relative;flex:none;max-width:160px;text-align:center;
+  font-family:var(--font-heading);font-weight:600;font-size:18px;line-height:1.15;color:#04121f;
+  background:linear-gradient(135deg,#25c6ff,#9a5cff);padding:16px 20px;border-radius:14px;
+  box-shadow:0 0 34px color-mix(in srgb,#25c6ff 50%,transparent);}
+.mm-root::after{content:"";position:absolute;right:-30px;top:50%;width:30px;height:2px;
+  background:#25c6ff;box-shadow:0 0 8px #25c6ff;}
+.mm-branches{position:relative;display:flex;flex-direction:column;gap:12px;padding-left:30px;flex:1;}
+.mm-branches::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:2px;
+  background:linear-gradient(#25c6ff,#9a5cff);box-shadow:0 0 10px color-mix(in srgb,#25c6ff 55%,transparent);}
+.mm-node{position:relative;background:color-mix(in srgb,#111a2e 82%,transparent);
+  border:1px solid var(--color-divider);border-radius:9px;padding:11px 15px;font-size:14px;line-height:1.4;
+  backdrop-filter:blur(6px);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;}
+.mm-node::before{content:"";position:absolute;left:-30px;top:50%;width:30px;height:2px;
+  background:#25c6ff;box-shadow:0 0 6px color-mix(in srgb,#25c6ff 60%,transparent);}
+.mm-node:hover{transform:translateX(5px);border-color:color-mix(in srgb,#25c6ff 55%,transparent);
+  box-shadow:0 0 24px color-mix(in srgb,#25c6ff 28%,transparent);}
+@media (max-width:560px){
+  .mindmap{flex-direction:column;gap:16px;}
+  .mm-root{align-self:flex-start;}
+  .mm-root::after{display:none;}
+  .game-hud{display:none}.cursor-glow{display:none}.game-toggle{display:block}
+  html.game-mode,html.game-mode body{overflow:hidden;overscroll-behavior:none;touch-action:none}
+}
+@media (prefers-reduced-motion: no-preference){
+  .a1{animation:au1 22s ease-in-out infinite alternate;}
+  .a2{animation:au2 27s ease-in-out infinite alternate;}
+  .a3{animation:au3 19s ease-in-out infinite alternate;}
+  @keyframes au1{from{transform:translate(0,0) scale(1);}to{transform:translate(8vw,6vh) scale(1.15);}}
+  @keyframes au2{from{transform:translate(0,0) scale(1.05);}to{transform:translate(-7vw,9vh) scale(.9);}}
+  @keyframes au3{from{transform:translate(0,0) scale(.95);}to{transform:translate(6vw,-7vh) scale(1.2);}}
+}
+</style>
+</head>
+<body>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+<div id="bg-field" aria-hidden="true">
+  <div class="aurora a1"></div>
+  <div class="aurora a2"></div>
+  <div class="aurora a3"></div>
+  <canvas id="net"></canvas>
+</div>
+<div class="game-flash" id="gameFlash" aria-hidden="true"></div>
+<div class="game-hud" aria-hidden="true"><b>ASL-01</b> · CLIC DISPARA<br>MANTÉN PRESIONADO PARA MOVER</div>
+<button class="game-toggle" id="gameToggle" type="button" aria-pressed="false" aria-label="Activar controles del juego">🚀 Jugar</button>
+<nav class="nav">
+  <a class="nav-brand" href="#inicio" aria-label="AndresSoft LAB — inicio"><span class="brand-icon" aria-hidden="true"><img src="/andressoft-logo.png" alt=""></span><span class="brand-copy"><span class="brand-name">Andres<b>Soft</b></span><span class="brand-lab">LAB</span></span></a>
+  <a href="#servicios" aria-current="location">Servicios</a>
+  <a href="#planes">Planes</a>
+  <a href="#servicios-medida">A la medida</a>
+  <a href="#contacto">Contacto</a>
+  <a class="btn btn-primary" href="https://wa.me/573173747234?text=Hola%20AndresSoft%20Lab%2C%20vi%20la%20web%20y%20quiero%20saber%20m%C3%A1s" target="_blank" rel="noopener">Agenda tu demo</a>
+</nav>
+<div class="wrap">
+
+  <section class="hero" id="inicio">
+    <h1 class="display"><span class="line">La tecnología de las</span> <span class="line">grandes empresas.</span> <span class="line">Al precio de tu negocio.</span></h1>
+    <p class="sub">Chatbots de WhatsApp y páginas web premium que venden por ti — 24 horas al día, los 7 días de la semana. Implementación desde 7 días, sin nómina y sin sorpresas.</p>
+    <div class="row">
+      <a class="btn btn-primary" href="https://wa.me/573173747234?text=Hola%20AndresSoft%20Lab%2C%20vi%20la%20web%20y%20quiero%20una%20demo%20gratis" target="_blank" rel="noopener">Agenda tu demo gratis</a>
+      <a class="btn btn-ghost" href="#planes">Ver planes y precios</a>
+    </div>
+  </section>
+
+  <section class="promo" id="ofertas" aria-label="Planes con precio fijo">
+    <span class="kicker">Planes con precio fijo · lanzamiento</span>
+    <h2 class="sec-title">Empieza a vender más desde $890.000.</h2>
+    <p class="sec-lead">Precios claros, sin letra menuda. Elige tu plan, y en 7 días lo tienes funcionando.</p>
+    <div class="promo-grid">
+
+      <article class="promo-card">
+        <span class="promo-tag">Esencial</span>
+        <h3 class="promo-name">Solo Página Web</h3>
+        <p class="promo-desc">Tu vitrina profesional, rápida y encontrable en Google.</p>
+        <p class="promo-from">Desde</p>
+        <p class="promo-price">$890.000</p>
+        <p class="promo-mo">pago único · + $99.000/mes opcional</p>
+        <ul class="promo-list">
+          <li>Diseño responsive (celular, tablet y PC)</li>
+          <li>Hasta 10 productos o servicios</li>
+          <li>Botones de WhatsApp y llamada</li>
+          <li>SEO básico e indexación en Google</li>
+        </ul>
+        <a class="btn btn-secondary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20quiero%20el%20plan%20Solo%20P%C3%A1gina%20Web%20(%24890.000)" target="_blank" rel="noopener">Quiero este plan</a>
+      </article>
+
+      <article class="promo-card promo-featured">
+        <span class="promo-ribbon">★ Más vendido</span>
+        <span class="promo-tag">El combo completo</span>
+        <h3 class="promo-name">Web + Chatbot WhatsApp</h3>
+        <p class="promo-desc">Tu página profesional y el asistente que vende, juntos y a mejor precio.</p>
+        <p class="promo-from">Desde</p>
+        <p class="promo-price">$1.990.000</p>
+        <p class="promo-mo">pago único · + $199.000/mes · ahorras vs. comprarlos por separado</p>
+        <ul class="promo-list">
+          <li>Todo lo del plan Solo Página Web</li>
+          <li>Todo lo del plan Solo Chatbot WhatsApp</li>
+          <li>Implementación coordinada en 7 días</li>
+          <li>La web y el chatbot conectados entre sí</li>
+        </ul>
+        <a class="btn btn-primary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20quiero%20el%20combo%20Web%20%2B%20Chatbot%20WhatsApp%20(%241.990.000)" target="_blank" rel="noopener">Quiero este plan</a>
+      </article>
+
+      <article class="promo-card">
+        <span class="promo-tag">Atiende por WhatsApp</span>
+        <h3 class="promo-name">Solo Chatbot WhatsApp</h3>
+        <p class="promo-desc">Un asistente que responde y toma pedidos 24/7, aunque aún no tengas web.</p>
+        <p class="promo-from">Desde</p>
+        <p class="promo-price">$1.490.000</p>
+        <p class="promo-mo">pago único · + $199.000/mes opcional</p>
+        <ul class="promo-list">
+          <li>Chatbot que responde en segundos, 24/7</li>
+          <li>Toma pedidos: productos, combos y cantidades</li>
+          <li>Registro automático en Google Sheets</li>
+          <li>Funciona sobre tu WhatsApp actual</li>
+        </ul>
+        <a class="btn btn-secondary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20quiero%20el%20plan%20Solo%20Chatbot%20WhatsApp%20(%241.490.000)" target="_blank" rel="noopener">Quiero este plan</a>
+      </article>
+
+    </div>
+    <p class="savings-note">Precios de lanzamiento en COP, no incluyen IVA. La mensualidad es opcional y cubre hosting, mantenimiento y soporte. Implementación en 7 días · Atención 24/7 · Ahorro de hasta 88% frente a contratar personal. Pregunta por descuentos de temporada y referidos.</p>
+  </section>
+
+  <section class="services" id="servicios">
+    <span class="kicker">Servicios</span>
+    <h2 class="sec-title">Dos formas de vender más, hoy mismo.</h2>
+
+    <div class="service">
+      <div class="svc-head">
+        <span class="kicker">Servicio 01 · El más solicitado</span>
+        <h3 class="svc-title">Automatiza tu negocio mientras duermes.</h3>
+        <p class="svc-lead">Un asistente que vive en tu WhatsApp: saluda, resuelve dudas, toma el pedido completo y te lo pasa cuando hace falta un humano.</p>
+      </div>
+      <div class="mindmap">
+        <div class="mm-root">Chatbot<br />WhatsApp</div>
+        <div class="mm-branches">
+          <div class="mm-node">Respuesta en &lt;3 s, siempre activa</div>
+          <div class="mm-node">Menú y catálogo automáticos</div>
+          <div class="mm-node">Toma de pedidos: productos, combos y cantidades</div>
+          <div class="mm-node">Dirección, pago, confirmación y registro en Google Sheets</div>
+          <div class="mm-node">IA + integración con CRM, inventario y pagos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service">
+      <div class="svc-head">
+        <span class="kicker">Servicio 02 · Desde $890.000</span>
+        <h3 class="svc-title">Tu página web será tu mejor vendedor.</h3>
+        <p class="svc-lead">Sitios modernos, rápidos y optimizados para convertir visitantes en clientes. No hacemos folletos digitales: hacemos máquinas de vender.</p>
+      </div>
+      <div class="mindmap">
+        <div class="mm-root">Web<br />Premium</div>
+        <div class="mm-branches">
+          <div class="mm-node">Responsive y carga en &lt;2 s</div>
+          <div class="mm-node">Optimización SEO desde el día uno</div>
+          <div class="mm-node">Catálogo con categorías y precios</div>
+          <div class="mm-node">Botón de pedido por WhatsApp + formularios</div>
+          <div class="mm-node">Carrito, pagos en línea y panel propio</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="plans" id="planes">
+    <span class="kicker">Formas de contratar</span>
+    <h2 class="sec-title">Tres maneras de trabajar juntos. Tú eliges cómo.</h2>
+    <p class="sec-lead">El sitio o el chatbot se construye una vez; lo que cambia es cómo manejamos el hosting, el dominio y el soporte después. Escoge el modelo que más te acomode.</p>
+    <div class="plans-grid">
+
+      <article class="card plan elev-sm">
+        <span class="card-kicker">Modelo A · Entrega + garantía</span>
+        <p class="plan-model">Pago único</p>
+        <p class="plan-pay">Tú asumes hosting y dominio</p>
+        <p class="plan-for">Para quien prefiere pagar una sola vez y administrar su propio hosting. Te lo entregamos listo para publicar.</p>
+        <ul class="plan-list">
+          <li>Desarrollo completo del sitio o chatbot</li>
+          <li>Entrega de archivos, código y accesos</li>
+          <li>Publicación en el hosting que tú elijas</li>
+          <li>Garantía de 30 días por fallas del desarrollo</li>
+          <li>Capacitación básica de uso</li>
+          <li>Soporte posterior: por cobro aparte</li>
+        </ul>
+        <a class="btn btn-secondary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20me%20interesa%20el%20Modelo%20A%20(pago%20%C3%BAnico%20%2B%20garant%C3%ADa)" target="_blank" rel="noopener">Cotizar</a>
+      </article>
+
+      <article class="card plan star elev-lg">
+        <span class="tag tag-accent-2 plan-badge">El más elegido</span>
+        <span class="card-kicker">Modelo B · Todo incluido · 1 año</span>
+        <p class="plan-model">Web + Hosting + Soporte</p>
+        <p class="plan-pay">Un pago anual, cero preocupaciones</p>
+        <p class="plan-for">Nosotros compramos y administramos tu hosting y dominio; tú solo recibes el sitio funcionando y renuevas una vez al año.</p>
+        <ul class="plan-list">
+          <li>Desarrollo del sitio o chatbot a tu medida</li>
+          <li>Hosting y dominio incluidos por 12 meses</li>
+          <li>Certificado SSL y copias de seguridad</li>
+          <li>Soporte y cambios menores todo el año</li>
+          <li>Renovación anual con precio preferente</li>
+        </ul>
+        <a class="btn btn-primary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20me%20interesa%20el%20Modelo%20B%20(todo%20incluido%20por%201%20a%C3%B1o)" target="_blank" rel="noopener">Cotizar</a>
+      </article>
+
+      <article class="card plan elev-sm">
+        <span class="card-kicker">Modelo C · Gestionado · mensual</span>
+        <p class="plan-model">Tarifa fija al mes</p>
+        <p class="plan-pay">Sin permanencia mínima</p>
+        <p class="plan-for">Todo administrado mes a mes: hosting, mantenimiento y soporte básico. Cancela cuando quieras.</p>
+        <ul class="plan-list">
+          <li>Hosting y dominio administrados por nosotros</li>
+          <li>Mantenimiento y actualizaciones continuas</li>
+          <li>Soporte básico incluido</li>
+          <li>Cambios menores del mes</li>
+          <li>Sin cláusulas de permanencia</li>
+        </ul>
+        <a class="btn btn-secondary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20me%20interesa%20el%20Modelo%20C%20(mensualidad%20fija)" target="_blank" rel="noopener">Cotizar</a>
+      </article>
+
+    </div>
+    <p class="savings-note">El desarrollo del sitio arranca desde $890.000 y el del chatbot de pedidos desde $1.490.000 (COP, no incluyen IVA); el valor final depende del alcance. Los cambios mayores, nuevas secciones o funciones se cotizan aparte. Tu dominio y tus datos siempre son tuyos: si decides irte, te los llevas. Escríbenos por promociones, descuentos por referidos y precios de temporada vigentes.</p>
+  </section>
+
+  <section class="plans" id="servicios-medida">
+    <span class="kicker">Consultoría y desarrollo a la medida</span>
+    <h2 class="sec-title">¿Necesitas algo más grande? Lo diseñamos para tu caso.</h2>
+    <p class="sec-lead">Estos servicios no tienen tarifa fija: el valor se define por alcance, complejidad y volumen de información. Cuéntanos tu reto y te armamos una propuesta a la medida.</p>
+    <div class="plans-grid medida-grid">
+
+      <article class="card plan elev-sm">
+        <span class="card-kicker">Datos e inteligencia de negocio</span>
+        <p class="plan-model">Consultoría BI</p>
+        <p class="plan-pay">Cotización por proyecto</p>
+        <ul class="plan-list">
+          <li>Tableros e indicadores (KPIs) a tu medida</li>
+          <li>Reportes automáticos que se actualizan solos</li>
+          <li>Análisis para tomar mejores decisiones</li>
+        </ul>
+        <a class="btn btn-secondary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20quiero%20consultor%C3%ADa%20BI" target="_blank" rel="noopener">Hablar del proyecto</a>
+      </article>
+
+      <article class="card plan elev-sm">
+        <span class="card-kicker">Integración y automatización</span>
+        <p class="plan-model">Procesos e información</p>
+        <p class="plan-pay">Cotización por alcance</p>
+        <ul class="plan-list">
+          <li>Conexión entre tus sistemas y aplicaciones</li>
+          <li>Automatización de tareas repetitivas</li>
+          <li>Flujos de información sin trabajo manual</li>
+        </ul>
+        <a class="btn btn-secondary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20quiero%20integraci%C3%B3n%20y%20automatizaci%C3%B3n" target="_blank" rel="noopener">Hablar del proyecto</a>
+      </article>
+
+      <article class="card plan elev-sm">
+        <span class="card-kicker">Bases de datos</span>
+        <p class="plan-model">Refinamiento de datos</p>
+        <p class="plan-pay">Cotización por volumen</p>
+        <ul class="plan-list">
+          <li>Limpieza y depuración de datos</li>
+          <li>Optimización de rendimiento y consultas</li>
+          <li>Estructura ordenada y confiable</li>
+        </ul>
+        <a class="btn btn-secondary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20quiero%20refinamiento%20de%20bases%20de%20datos" target="_blank" rel="noopener">Hablar del proyecto</a>
+      </article>
+
+      <article class="card plan elev-sm">
+        <span class="card-kicker">Software a la medida</span>
+        <p class="plan-model">Apps móviles y de escritorio</p>
+        <p class="plan-pay">Cotización por proyecto</p>
+        <ul class="plan-list">
+          <li>Aplicaciones móviles (Android / iOS)</li>
+          <li>Programas de escritorio para tu operación</li>
+          <li>Hechas a la medida de tu negocio</li>
+        </ul>
+        <a class="btn btn-secondary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20quiero%20una%20app%20a%20la%20medida" target="_blank" rel="noopener">Hablar del proyecto</a>
+      </article>
+
+      <article class="card plan elev-sm">
+        <span class="card-kicker">Posicionamiento y tecnología</span>
+        <p class="plan-model">Asesorías SEO y tech</p>
+        <p class="plan-pay">Por sesión o por proyecto</p>
+        <ul class="plan-list">
+          <li>Posicionamiento en Google (SEO)</li>
+          <li>Asesoría en herramientas y tecnología</li>
+          <li>Acompañamiento en tu transformación digital</li>
+        </ul>
+        <a class="btn btn-secondary btn-block" href="https://wa.me/573173747234?text=Hola%2C%20quiero%20asesor%C3%ADa%20SEO%20o%20tecnol%C3%B3gica" target="_blank" rel="noopener">Hablar del proyecto</a>
+      </article>
+
+    </div>
+    <p class="savings-note">Cuéntanos qué necesitas resolver; te hacemos un diagnóstico y una propuesta con precio y tiempos antes de empezar. Sin costo por la primera conversación.</p>
+  </section>
+
+  <section class="contact" id="contacto">
+    <span class="kicker">Contacto</span>
+    <h2 class="sec-title">Empecemos con una conversación de 15 minutos.</h2>
+    <p class="sec-lead">Sin compromiso, sin lenguaje raro y sin costo. Te mostramos tu propio chatbot o un boceto de tu página funcionando antes de que pagues un peso.</p>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <span class="kicker">WhatsApp</span>
+        <p class="contact-val"><a href="https://wa.me/573173747234?text=Hola%20AndresSoft%20Lab%2C%20vi%20la%20web%20y%20quiero%20saber%20m%C3%A1s" target="_blank" rel="noopener">+57 317 374 7234</a></p>
+        <p class="contact-sub">Respuesta en minutos</p>
+      </div>
+      <div class="contact-item">
+        <span class="kicker">Correo</span>
+        <p class="contact-val"><a href="mailto:andressoftlab@gmail.com">andressoftlab@gmail.com</a></p>
+        <p class="contact-sub">Respuesta en 24 horas</p>
+      </div>
+      <div class="contact-item">
+        <span class="kicker">Dónde</span>
+        <p class="contact-val">Bogotá, Colombia</p>
+        <p class="contact-sub">Atendemos todo el país de forma remota</p>
+      </div>
+    </div>
+    <div class="contact-cta">
+      <a class="btn btn-primary btn-lg" href="https://wa.me/573173747234?text=Hola%20AndresSoft%20Lab%2C%20quiero%20agendar%20mi%20demo%20gratis" target="_blank" rel="noopener">Agenda tu demo gratis →</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-brand"><span class="brand-icon" aria-hidden="true"><img src="/andressoft-logo.png" alt=""></span><span class="brand-copy"><span class="brand-name">Andres<b>Soft</b></span><span class="brand-lab">LAB</span></span></div>
+    <p class="foot-slogan">Transformamos datos en decisiones inteligentes.</p>
+    <p>Datos · IA · Automatización · Software · Bogotá, Colombia · Lunes a sábado, 8:00 a.m. – 6:00 p.m. — nuestro chatbot atiende 24/7.</p>
+  </footer>
+</div>
+<script>
+// Scroll reveal — fade-and-rise as sections enter the viewport (respects reduced-motion).
+(() => {
+  const sel = '.hero .display, .hero .sub, .hero .row, .promo .sec-title, .promo .sec-lead, .promo-grid .promo-card, .services .svc-head, .services .mm-root, .services .mm-node, .plans .sec-title, .plans .sec-lead, .plans-grid .plan, .contact .sec-title, .contact .sec-lead, .contact-grid .contact-item, .contact-cta';
+  const els = [...document.querySelectorAll(sel)];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('is-in')); return; }
+  // stagger siblings that share a parent
+  els.forEach(e => {
+    const sibs = [...e.parentElement.children].filter(c => els.includes(c));
+    const i = sibs.indexOf(e);
+    if (i > 0) e.style.transitionDelay = (i * 0.09) + 's';
+  });
+  const io = new IntersectionObserver((ents) => {
+    ents.forEach(en => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(e => io.observe(e));
+})();
+// Dynamic aurora — gentle parallax offset on scroll (idle drift is CSS-driven).
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const f = document.getElementById('bg-field');
+  if (!f) return;
+  let ticking = false;
+  const update = () => { f.style.transform = 'translateY(' + ((window.scrollY||0) * -0.06) + 'px)'; ticking = false; };
+  addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(update); ticking = true; } }, { passive: true });
+  update();
+})();
+
+// Navigation, progress, pointer glow, button ripple and card depth.
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const progress = document.getElementById('scrollProgress');
+  const glow = document.getElementById('cursorGlow');
+  const links = [...document.querySelectorAll('.nav a[href^="#"]')];
+  const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  function updatePageUI(){
+    const max=document.documentElement.scrollHeight-innerHeight;
+    progress.style.width=(max>0?scrollY/max*100:0)+'%';
+    let current=sections[0]; sections.forEach(s=>{if(s.getBoundingClientRect().top<innerHeight*.35)current=s;});
+    links.forEach(a=>a.classList.toggle('active',current&&a.getAttribute('href')==='#'+current.id));
+  }
+  addEventListener('scroll',updatePageUI,{passive:true}); updatePageUI();
+  addEventListener('pointermove',e=>{if(glow){glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';}},{passive:true});
+  document.querySelectorAll('.btn').forEach(btn=>btn.addEventListener('click',e=>{
+    const r=btn.getBoundingClientRect(),d=Math.max(r.width,r.height),s=document.createElement('span');
+    s.className='ripple';s.style.width=s.style.height=d+'px';s.style.left=(e.clientX-r.left-d/2)+'px';s.style.top=(e.clientY-r.top-d/2)+'px';btn.appendChild(s);setTimeout(()=>s.remove(),700);
+  }));
+  if(!reduce&&matchMedia('(hover:hover)').matches){document.querySelectorAll('.promo-card,.plan').forEach(card=>{
+    card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(800px) rotateY(${x*5}deg) rotateX(${-y*5}deg) translateY(-5px)`;});
+    card.addEventListener('pointerleave',()=>card.style.transform='');
+  });}
+})();
+</script>
+<script>
+// Endless AndresSoft asteroid game: aim with mouse, move with keyboard, click to fire.
+(() => {
+  const cv = document.getElementById('net');
+  if (!cv || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = cv.getContext('2d');
+  const flash=document.getElementById('gameFlash'),hud=document.querySelector('.game-hud');
+  const gameToggle=document.getElementById('gameToggle'),coarse=matchMedia('(pointer:coarse)').matches;
+  let gameActive=!coarse;
+  let W=0,H=0,dpr=Math.min(devicePixelRatio||1,2),pts=[],lasers=[],rocks=[],sparks=[],started=performance.now(),last=performance.now(),spawnClock=0,dead=false;
+  const mouse = { x: -9999, y: -9999, down:false, started:0, startX:0, startY:0, blocked:false };
+  const keys=new Set(),ship={x:0,y:0,angle:-Math.PI/2,r:18};
+  function setGameActive(active){
+    gameActive=active;
+    document.documentElement.classList.toggle('game-mode',active&&coarse);
+    if(gameToggle){
+      gameToggle.setAttribute('aria-pressed',String(active));
+      gameToggle.setAttribute('aria-label',active?'Salir del juego':'Activar controles del juego');
+      gameToggle.textContent=active?'✕ Salir':'🚀 Jugar';
+    }
+    if(!active){mouse.down=false;mouse.blocked=false;mouse.x=mouse.y=-9999;}
+  }
+  if(gameToggle)gameToggle.addEventListener('click',()=>setGameActive(!gameActive));
+  const fmt=ms=>{const s=ms/1000;return s<60?s.toFixed(1)+' s':Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
+  function renderHud(times=[]){
+    const elapsed=dead?0:performance.now()-started;
+    hud.innerHTML='<b>ASL-01</b> · '+fmt(elapsed)+'<br>CLIC: DISPARA · MANTÉN: MUEVE'+(times.length?'<br><span>RÉCORDS: '+times.map(t=>fmt(t.milliseconds)).join(' · ')+'</span>':'');
+  }
+  async function loadTimes(){try{const r=await fetch('/api/survival');if(r.ok)renderHud((await r.json()).times);}catch{renderHud();}}
+  function resize() {
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const target = Math.min(90, Math.round(W * H / 16000));
+    pts = Array.from({ length: target }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35
+    }));
+    if(!ship.x){ship.x=W*.72;ship.y=H*.68;}
+  }
+  addEventListener('resize', resize, { passive: true });
+  addEventListener('pointermove', e => { if(!gameActive)return;mouse.x=e.clientX;mouse.y=e.clientY;if(coarse&&mouse.down&&!mouse.blocked)e.preventDefault(); }, { passive: false });
+  addEventListener('pointerdown',e=>{if(!gameActive)return;mouse.x=e.clientX;mouse.y=e.clientY;mouse.down=true;mouse.started=performance.now();mouse.startX=e.clientX;mouse.startY=e.clientY;mouse.blocked=!!e.target.closest('a,button');if(!mouse.blocked)e.preventDefault();});
+  addEventListener('pointerup',e=>{if(!gameActive)return;const short=performance.now()-mouse.started<210&&Math.hypot(e.clientX-mouse.startX,e.clientY-mouse.startY)<9;mouse.down=false;if(dead||mouse.blocked||!short)return;const speed=11;lasers.push({x:ship.x+Math.cos(ship.angle)*27,y:ship.y+Math.sin(ship.angle)*27,vx:Math.cos(ship.angle)*speed,vy:Math.sin(ship.angle)*speed});});
+  addEventListener('pointercancel',()=>{mouse.down=false;mouse.blocked=false;});
+  addEventListener('pointerleave', () => { mouse.down=false;mouse.x = mouse.y = -9999; });
+  addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'].includes(e.key)){keys.add(e.key.toLowerCase());if(e.key.startsWith('Arrow'))e.preventDefault();}});
+  addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
+  addEventListener('copy',e=>e.preventDefault());
+  function spawnRock(){
+    const edge=Math.floor(Math.random()*4),pad=55,targetX=ship.x+(Math.random()-.5)*260,targetY=ship.y+(Math.random()-.5)*220;
+    let x,y;if(edge===0){x=Math.random()*W;y=-pad;}else if(edge===1){x=W+pad;y=Math.random()*H;}else if(edge===2){x=Math.random()*W;y=H+pad;}else{x=-pad;y=Math.random()*H;}
+    const age=(performance.now()-started)/1000,speed=0.85+Math.min(4.6,age*.035)+Math.random()*.7,ang=Math.atan2(targetY-y,targetX-x),r=13+Math.random()*24,n=7+Math.floor(Math.random()*5);
+    rocks.push({x,y,vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed,r,rot:Math.random()*6.28,spin:(Math.random()-.5)*.045,shape:Array.from({length:n},()=>.72+Math.random()*.38)});
+  }
+  function explodeRock(r,color='#25c6ff'){for(let i=0;i<12;i++){const a=Math.random()*6.28,s=1+Math.random()*3;sparks.push({x:r.x,y:r.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,color});}}
+  async function destroyShip(){
+    if(dead)return;dead=true;const survived=Math.round(performance.now()-started);explodeRock({x:ship.x,y:ship.y},'#fff');for(let i=0;i<25;i++)explodeRock({x:ship.x+(Math.random()-.5)*20,y:ship.y+(Math.random()-.5)*20},i%2?'#9a5cff':'#25c6ff');flash.classList.add('on');
+    let times=[];try{const r=await fetch('/api/survival',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({milliseconds:survived})});if(r.ok){times=(await r.json()).times;window.__aslTimes=times;}}catch{}
+    renderHud(times);setTimeout(()=>{flash.classList.remove('on');rocks=[];lasers=[];sparks=[];ship.x=W*.72;ship.y=H*.68;started=performance.now();spawnClock=0;dead=false;renderHud(times);},1150);
+  }
+  const LINK = 132, MLINK = 190;
+  function frame(now) {
+    const dt=Math.min(2,(now-last)/16.67||1);last=now;
+    ctx.clearRect(0, 0, W, H);
+    for (const p of pts) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W) p.vx *= -1;
+      if (p.y < 0 || p.y > H) p.vy *= -1;
+      // gentle pull toward pointer
+      const dxm = mouse.x - p.x, dym = mouse.y - p.y, dm = Math.hypot(dxm, dym);
+      if (dm < MLINK) { p.vx += dxm / dm * 0.012; p.vy += dym / dm * 0.012; }
+      p.vx = Math.max(-0.7, Math.min(0.7, p.vx)); p.vy = Math.max(-0.7, Math.min(0.7, p.vy));
+    }
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i];
+      for (let j = i + 1; j < pts.length; j++) {
+        const b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < LINK) {
+          ctx.strokeStyle = 'rgba(37,198,255,' + (0.16 * (1 - d / LINK)) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+      const dmm = Math.hypot(a.x - mouse.x, a.y - mouse.y);
+      if (dmm < MLINK) {
+        ctx.strokeStyle = 'rgba(154,92,255,' + (0.4 * (1 - dmm / MLINK)) + ')';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+      }
+      ctx.fillStyle = 'rgba(120,220,255,0.75)';
+      ctx.beginPath(); ctx.arc(a.x, a.y, 1.5, 0, 6.283); ctx.fill();
+    }
+    if(!dead){
+      ship.angle=Math.atan2(mouse.y-ship.y,mouse.x-ship.x);
+      const mv=4.1*dt;if(keys.has('w')||keys.has('arrowup'))ship.y-=mv;if(keys.has('s')||keys.has('arrowdown'))ship.y+=mv;if(keys.has('a')||keys.has('arrowleft'))ship.x-=mv;if(keys.has('d')||keys.has('arrowright'))ship.x+=mv;if(mouse.down&&!mouse.blocked){const dx=mouse.x-ship.x,dy=mouse.y-ship.y,d=Math.hypot(dx,dy);if(d>10){const dragSpeed=Math.min(6.2*dt,d*.11);ship.x+=dx/d*dragSpeed;ship.y+=dy/d*dragSpeed;}}ship.x=Math.max(28,Math.min(W-28,ship.x));ship.y=Math.max(92,Math.min(H-28,ship.y));
+      const age=(now-started)/1000,interval=Math.max(260,1350-age*12);spawnClock+=dt*16.67;if(spawnClock>interval){spawnClock=0;spawnRock();if(age>35&&Math.random()>.55)spawnRock();}
+    }
+    lasers.forEach(l=>{l.x+=l.vx*dt;l.y+=l.vy*dt;});lasers=lasers.filter(l=>l.x>-40&&l.x<W+40&&l.y>-40&&l.y<H+40);
+    rocks.forEach(r=>{r.x+=r.vx*dt;r.y+=r.vy*dt;r.rot+=r.spin*dt;});
+    for(let i=rocks.length-1;i>=0;i--){const r=rocks[i];let hit=-1;for(let j=lasers.length-1;j>=0;j--)if(Math.hypot(r.x-lasers[j].x,r.y-lasers[j].y)<r.r+4){hit=j;break;}if(hit>=0){lasers.splice(hit,1);rocks.splice(i,1);explodeRock(r);continue;}if(!dead&&Math.hypot(r.x-ship.x,r.y-ship.y)<r.r+ship.r){destroyShip();}if(r.x<-120||r.x>W+120||r.y<-120||r.y>H+120)rocks.splice(i,1);}
+    rocks.forEach(r=>{ctx.save();ctx.translate(r.x,r.y);ctx.rotate(r.rot);ctx.beginPath();r.shape.forEach((m,i)=>{const a=i/r.shape.length*6.283,x=Math.cos(a)*r.r*m,y=Math.sin(a)*r.r*m;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fillStyle='rgba(27,38,62,.96)';ctx.strokeStyle='rgba(127,224,255,.65)';ctx.lineWidth=1.4;ctx.shadowBlur=12;ctx.shadowColor='rgba(37,198,255,.25)';ctx.fill();ctx.stroke();ctx.restore();});
+    lasers.forEach(l=>{ctx.strokeStyle='#7fe0ff';ctx.lineWidth=2.5;ctx.shadowBlur=12;ctx.shadowColor='#25c6ff';ctx.beginPath();ctx.moveTo(l.x-l.vx*1.5,l.y-l.vy*1.5);ctx.lineTo(l.x,l.y);ctx.stroke();ctx.shadowBlur=0;});
+    sparks.forEach(s=>{s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=.025*dt;ctx.globalAlpha=Math.max(0,s.life);ctx.fillStyle=s.color;ctx.fillRect(s.x,s.y,2.3,2.3);});ctx.globalAlpha=1;sparks=sparks.filter(s=>s.life>0);
+    if(!dead){ctx.save();ctx.translate(ship.x,ship.y);ctx.rotate(ship.angle+Math.PI/2);
+    const flame=13+Math.sin(performance.now()*.018)*5;ctx.beginPath();ctx.moveTo(-8,18);ctx.lineTo(0,18+flame);ctx.lineTo(8,18);ctx.closePath();const fg=ctx.createLinearGradient(0,18,0,42);fg.addColorStop(0,'#fff');fg.addColorStop(.25,'#25c6ff');fg.addColorStop(1,'rgba(154,92,255,0)');ctx.fillStyle=fg;ctx.fill();
+    ctx.shadowBlur=22;ctx.shadowColor='#25c6ff';ctx.beginPath();ctx.moveTo(0,-30);ctx.lineTo(27,19);ctx.lineTo(9,14);ctx.lineTo(0,23);ctx.lineTo(-9,14);ctx.lineTo(-27,19);ctx.closePath();const sg=ctx.createLinearGradient(-22,-22,23,22);sg.addColorStop(0,'#25c6ff');sg.addColorStop(.5,'#eaf2ff');sg.addColorStop(1,'#9a5cff');ctx.fillStyle=sg;ctx.fill();ctx.shadowBlur=0;ctx.beginPath();ctx.moveTo(0,-17);ctx.lineTo(8,8);ctx.lineTo(0,13);ctx.lineTo(-8,8);ctx.closePath();ctx.fillStyle='#0a0e1a';ctx.fill();ctx.restore();
+    }
+    if(!dead&&Math.floor(now/200)!==Math.floor((now-dt*16.67)/200))renderHud(window.__aslTimes||[]);
+    requestAnimationFrame(frame);
+  }
+  setGameActive(gameActive);resize();loadTimes().then(()=>fetch('/api/survival').then(r=>r.ok?r.json():{times:[]}).then(d=>{window.__aslTimes=d.times;renderHud(d.times);}).catch(()=>{}));requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
