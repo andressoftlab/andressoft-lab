@@ -5,7 +5,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>AndresSoft Lab — Datos · IA · Automatización · Software</title>
 <style>
 :root {
@@ -20,10 +20,10 @@
   --space-2:8px; --space-3:12px; --space-4:20px;
   --shadow-md:0 18px 42px rgba(0,0,0,.34); --shadow-lg:0 28px 70px rgba(0,0,0,.5);
 }
-html { scroll-behavior: smooth; background: var(--color-bg); }
+html { scroll-behavior: smooth; background: var(--color-bg); max-width:100%; overflow-x:hidden; overscroll-behavior-x:none; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 *{box-sizing:border-box}
-body { margin: 0; text-wrap: pretty; background: transparent;color:var(--color-text);font:400 16px/1.6 Inter,ui-sans-serif,system-ui,sans-serif;overflow-x:hidden;user-select:none;-webkit-user-select:none; }
+body { width:100%; max-width:100%; margin: 0; text-wrap: pretty; background: transparent;color:var(--color-text);font:400 16px/1.6 Inter,ui-sans-serif,system-ui,sans-serif;overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y;user-select:none;-webkit-user-select:none; }
 img{user-select:none;-webkit-user-select:none;-webkit-user-drag:none}a,button{touch-action:manipulation}
 a{color:inherit}.nav{display:flex;align-items:center;gap:clamp(12px,2vw,28px);min-height:72px;padding-block:12px;position:sticky!important;top:0;background:rgba(10,14,26,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--color-divider);z-index:40!important}
 .nav-brand{margin-right:auto;font-weight:800;letter-spacing:-.02em}.btn{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--color-divider);border-radius:999px;padding:11px 18px;text-decoration:none;font-weight:700;overflow:hidden;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}.btn-primary{color:#06101d;background:linear-gradient(135deg,#25c6ff,#9a5cff);border:0;box-shadow:0 10px 28px rgba(37,198,255,.25)}.btn-secondary,.btn-ghost{background:rgba(17,26,46,.7)}.btn:hover{transform:translateY(-3px);box-shadow:0 14px 38px rgba(37,198,255,.25);border-color:#25c6ff}.btn-block{width:100%}.card{display:flex;flex-direction:column;border:1px solid var(--color-divider);border-radius:16px;background:rgba(17,26,46,.76);backdrop-filter:blur(10px)}.card-kicker,.tag{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-accent-700)}
@@ -379,6 +379,8 @@ html,body{background:#0a0e1a;color:var(--color-text);}
 #net{position:absolute;inset:0;display:block;width:100%;height:100%;}
 .game-hud{position:fixed;right:18px;bottom:18px;z-index:20;pointer-events:none;font:600 10px/1.35 ui-monospace,monospace;letter-spacing:.1em;color:rgba(127,224,255,.8);padding:9px 12px;border:1px solid rgba(37,198,255,.24);border-radius:9px;background:rgba(10,14,26,.55);backdrop-filter:blur(8px)}
 .game-hud b{color:#fff}.nav a.active:not(.btn){color:#7fe0ff;text-shadow:0 0 12px rgba(37,198,255,.7)}
+.game-toggle{display:none;position:fixed;right:14px;bottom:14px;z-index:60;min-width:92px;border:1px solid rgba(127,224,255,.45);border-radius:999px;padding:11px 16px;color:#06101d;background:linear-gradient(135deg,#25c6ff,#9a5cff);box-shadow:0 8px 28px rgba(37,198,255,.35);font:800 13px/1 Inter,system-ui,sans-serif}
+.game-toggle[aria-pressed="true"]{color:#eaf2ff;background:rgba(10,14,26,.9);border-color:#9a5cff}
 .game-flash{position:fixed;inset:0;z-index:19;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.58),rgba(154,92,255,.18) 22%,transparent 55%);opacity:0;transition:opacity .22s ease}.game-flash.on{opacity:1}
 /* synoptic mind-map (replaces bullet lists) */
 .mindmap{display:flex;align-items:stretch;gap:30px;}
@@ -402,7 +404,8 @@ html,body{background:#0a0e1a;color:var(--color-text);}
   .mindmap{flex-direction:column;gap:16px;}
   .mm-root{align-self:flex-start;}
   .mm-root::after{display:none;}
-  .game-hud{display:none}.cursor-glow{display:none}
+  .game-hud{display:none}.cursor-glow{display:none}.game-toggle{display:block}
+  html.game-mode,html.game-mode body{overflow:hidden;overscroll-behavior:none;touch-action:none}
 }
 @media (prefers-reduced-motion: no-preference){
   .a1{animation:au1 22s ease-in-out infinite alternate;}
@@ -425,6 +428,7 @@ html,body{background:#0a0e1a;color:var(--color-text);}
 </div>
 <div class="game-flash" id="gameFlash" aria-hidden="true"></div>
 <div class="game-hud" aria-hidden="true"><b>ASL-01</b> · CLIC DISPARA<br>MANTÉN PRESIONADO PARA MOVER</div>
+<button class="game-toggle" id="gameToggle" type="button" aria-pressed="false" aria-label="Activar controles del juego">🚀 Jugar</button>
 <nav class="nav">
   <a class="nav-brand" href="#inicio" aria-label="AndresSoft LAB — inicio"><span class="brand-icon" aria-hidden="true"><img src="/andressoft-logo.png" alt=""></span><span class="brand-copy"><span class="brand-name">Andres<b>Soft</b></span><span class="brand-lab">LAB</span></span></a>
   <a href="#servicios" aria-current="location">Servicios</a>
@@ -764,9 +768,22 @@ html,body{background:#0a0e1a;color:var(--color-text);}
   if (!cv || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ctx = cv.getContext('2d');
   const flash=document.getElementById('gameFlash'),hud=document.querySelector('.game-hud');
+  const gameToggle=document.getElementById('gameToggle'),coarse=matchMedia('(pointer:coarse)').matches;
+  let gameActive=!coarse;
   let W=0,H=0,dpr=Math.min(devicePixelRatio||1,2),pts=[],lasers=[],rocks=[],sparks=[],started=performance.now(),last=performance.now(),spawnClock=0,dead=false;
   const mouse = { x: -9999, y: -9999, down:false, started:0, startX:0, startY:0, blocked:false };
   const keys=new Set(),ship={x:0,y:0,angle:-Math.PI/2,r:18};
+  function setGameActive(active){
+    gameActive=active;
+    document.documentElement.classList.toggle('game-mode',active&&coarse);
+    if(gameToggle){
+      gameToggle.setAttribute('aria-pressed',String(active));
+      gameToggle.setAttribute('aria-label',active?'Salir del juego':'Activar controles del juego');
+      gameToggle.textContent=active?'✕ Salir':'🚀 Jugar';
+    }
+    if(!active){mouse.down=false;mouse.blocked=false;mouse.x=mouse.y=-9999;}
+  }
+  if(gameToggle)gameToggle.addEventListener('click',()=>setGameActive(!gameActive));
   const fmt=ms=>{const s=ms/1000;return s<60?s.toFixed(1)+' s':Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
   function renderHud(times=[]){
     const elapsed=dead?0:performance.now()-started;
@@ -785,9 +802,9 @@ html,body{background:#0a0e1a;color:var(--color-text);}
     if(!ship.x){ship.x=W*.72;ship.y=H*.68;}
   }
   addEventListener('resize', resize, { passive: true });
-  addEventListener('pointermove', e => { mouse.x=e.clientX;mouse.y=e.clientY; }, { passive: true });
-  addEventListener('pointerdown',e=>{mouse.x=e.clientX;mouse.y=e.clientY;mouse.down=true;mouse.started=performance.now();mouse.startX=e.clientX;mouse.startY=e.clientY;mouse.blocked=!!e.target.closest('a,button');if(!mouse.blocked)e.preventDefault();});
-  addEventListener('pointerup',e=>{const short=performance.now()-mouse.started<210&&Math.hypot(e.clientX-mouse.startX,e.clientY-mouse.startY)<9;mouse.down=false;if(dead||mouse.blocked||!short)return;const speed=11;lasers.push({x:ship.x+Math.cos(ship.angle)*27,y:ship.y+Math.sin(ship.angle)*27,vx:Math.cos(ship.angle)*speed,vy:Math.sin(ship.angle)*speed});});
+  addEventListener('pointermove', e => { if(!gameActive)return;mouse.x=e.clientX;mouse.y=e.clientY;if(coarse&&mouse.down&&!mouse.blocked)e.preventDefault(); }, { passive: false });
+  addEventListener('pointerdown',e=>{if(!gameActive)return;mouse.x=e.clientX;mouse.y=e.clientY;mouse.down=true;mouse.started=performance.now();mouse.startX=e.clientX;mouse.startY=e.clientY;mouse.blocked=!!e.target.closest('a,button');if(!mouse.blocked)e.preventDefault();});
+  addEventListener('pointerup',e=>{if(!gameActive)return;const short=performance.now()-mouse.started<210&&Math.hypot(e.clientX-mouse.startX,e.clientY-mouse.startY)<9;mouse.down=false;if(dead||mouse.blocked||!short)return;const speed=11;lasers.push({x:ship.x+Math.cos(ship.angle)*27,y:ship.y+Math.sin(ship.angle)*27,vx:Math.cos(ship.angle)*speed,vy:Math.sin(ship.angle)*speed});});
   addEventListener('pointercancel',()=>{mouse.down=false;mouse.blocked=false;});
   addEventListener('pointerleave', () => { mouse.down=false;mouse.x = mouse.y = -9999; });
   addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'].includes(e.key)){keys.add(e.key.toLowerCase());if(e.key.startsWith('Arrow'))e.preventDefault();}});
@@ -855,7 +872,7 @@ html,body{background:#0a0e1a;color:var(--color-text);}
     if(!dead&&Math.floor(now/200)!==Math.floor((now-dt*16.67)/200))renderHud(window.__aslTimes||[]);
     requestAnimationFrame(frame);
   }
-  resize();loadTimes().then(()=>fetch('/api/survival').then(r=>r.ok?r.json():{times:[]}).then(d=>{window.__aslTimes=d.times;renderHud(d.times);}).catch(()=>{}));requestAnimationFrame(frame);
+  setGameActive(gameActive);resize();loadTimes().then(()=>fetch('/api/survival').then(r=>r.ok?r.json():{times:[]}).then(d=>{window.__aslTimes=d.times;renderHud(d.times);}).catch(()=>{}));requestAnimationFrame(frame);
 })();
 </script>
 </body>
