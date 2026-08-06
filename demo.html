@@ -404,6 +404,9 @@ html,body{background:#0a0e1a;color:var(--color-text);}
   .mindmap{flex-direction:column;gap:16px;}
   .mm-root{align-self:flex-start;}
   .mm-root::after{display:none;}
+  .game-hud{display:none}.cursor-glow{display:none}
+}
+@media (pointer:coarse){
   .game-hud{display:none}.cursor-glow{display:none}.game-toggle{display:block}
   html.game-mode,html.game-mode body{overflow:hidden;overscroll-behavior:none;touch-action:none}
 }
@@ -765,7 +768,7 @@ html,body{background:#0a0e1a;color:var(--color-text);}
 // Endless AndresSoft asteroid game: aim with mouse, move with keyboard, click to fire.
 (() => {
   const cv = document.getElementById('net');
-  if (!cv || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!cv) return;
   const ctx = cv.getContext('2d');
   const flash=document.getElementById('gameFlash'),hud=document.querySelector('.game-hud');
   const gameToggle=document.getElementById('gameToggle'),coarse=matchMedia('(pointer:coarse)').matches;
