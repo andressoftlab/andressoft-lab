@@ -28,3 +28,6 @@ Abre `http://localhost:3000`.
 ## Nota sobre el ranking
 
 Sin `DATABASE_URL`, el sitio y el juego siguen funcionando, pero el ranking global aparecerá vacío y no conservará tiempos.
+
+
+Proyecto conectado y desplegado automáticamente con Vercel.
